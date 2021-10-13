@@ -26,6 +26,7 @@
       <version>8.0.22</version>
     </dependency>
 
+
     <dependency>
       <groupId>org.eclipse.microprofile</groupId>
       <artifactId>microprofile</artifactId>
