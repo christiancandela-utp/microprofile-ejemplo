@@ -15,7 +15,7 @@ import javax.ws.rs.core.Application;
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "${'java:app/ejemplo/mysql'}",
         callerQuery = "#{'select password from USER where username = ?'}",
-        groupsQuery = "select rol_name from USER_ROL where username = ?",
+        groupsQuery = "select rols_name from USER_ROL where User_username = ?",
         //hashAlgorithm = Pbkdf2PasswordHash.class,
         hashAlgorithm = ClearHash.class,
         priorityExpression = "#{100}"
