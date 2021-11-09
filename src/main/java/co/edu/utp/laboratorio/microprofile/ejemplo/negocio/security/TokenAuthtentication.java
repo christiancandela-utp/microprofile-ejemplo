@@ -17,10 +17,14 @@ import javax.ws.rs.core.HttpHeaders;
 import java.util.HashSet;
 
 import static java.util.Arrays.asList;
+import static javax.security.enterprise.identitystore.CredentialValidationResult.INVALID_RESULT;
 
 @AutoApplySession
 @ApplicationScoped
 public class TokenAuthtentication implements HttpAuthenticationMechanism {
+
+    private static final String TOKEN_CONSTANT = "Bearer ";
+    private static final int TOKEN_CONSTANT_LENGTH = TOKEN_CONSTANT.length();
 
     @Inject
     private IdentityStoreHandler identityStoreHandler;
@@ -30,24 +34,27 @@ public class TokenAuthtentication implements HttpAuthenticationMechanism {
         if( httpMessageContext.isAuthenticationRequest() && httpMessageContext.getAuthParameters().isNewAuthentication() ){
             CredentialValidationResult result = identityStoreHandler.validate(
                     httpMessageContext.getAuthParameters().getCredential() );
-            if( result == CredentialValidationResult.INVALID_RESULT ){
+            if( result == INVALID_RESULT ){
                 return AuthenticationStatus.SEND_FAILURE;
             }
 
-            httpMessageContext.getResponse().setHeader(HttpHeaders.AUTHORIZATION,"Bearer 123aasdasd121212323");
+            httpMessageContext.getResponse().setHeader(HttpHeaders.AUTHORIZATION,
+                    TOKEN_CONSTANT+TokenUtil.create(result.getCallerPrincipal().getName(),result.getCallerGroups()));
 
             return httpMessageContext.notifyContainerAboutLogin( result );
         }
 
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if( token != null && isValid(token) ){
-            httpMessageContext.getResponse().setHeader(HttpHeaders.AUTHORIZATION,"Bearer 123aasdasd121212323");
-            return httpMessageContext.notifyContainerAboutLogin("prueba",new HashSet<>(asList("user")));
+        CredentialValidationResult result = token == null ? INVALID_RESULT : TokenUtil.parseToken( token.substring(
+                TOKEN_CONSTANT_LENGTH
+        ) );
+
+        if( result != INVALID_RESULT ){
+            httpMessageContext.getResponse().setHeader(HttpHeaders.AUTHORIZATION,token);
+            return httpMessageContext.notifyContainerAboutLogin(result.getCallerPrincipal(),result.getCallerGroups());
         }
         return httpMessageContext.doNothing();
     }
 
-    private boolean isValid(String token) {
-        return ("Bearer 123aasdasd121212323").equals(token);
-    }
+
 }
