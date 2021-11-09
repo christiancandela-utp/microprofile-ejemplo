@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  ejemplo_api_service:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - server_db
+    environment:
+      url: jdbc:mysql://server_db:3306/ejemplo
+      user: usuario_dev
+      password: 12345
+  server_db:
+    image: 'mariadb:10.5.8'
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ejemplo
+      MYSQL_USER: usuario_dev
+      MYSQL_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345
