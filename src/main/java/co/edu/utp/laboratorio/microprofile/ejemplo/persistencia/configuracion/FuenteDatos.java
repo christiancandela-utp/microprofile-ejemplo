@@ -19,11 +19,11 @@ import java.util.List;
 
         name="java:app/ejemplo/mysql",
         className = "com.mysql.cj.jdbc.MysqlDataSource",
-        serverName = "localhost",
         portNumber = 3306,
-        user= "root",
-        password = "12345678",
-        databaseName = "ejemplo",
+        //portNumber = "${db.port}"., //
+        url = "${ENV=url}",//
+        user = "${ENV=user}", //
+        password = "${ENV=password}", //
         initialPoolSize = 2,
         minPoolSize = 2,
         maxPoolSize = 10,

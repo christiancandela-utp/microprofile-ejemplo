@@ -11,6 +11,11 @@ The generation of the executable jar file can be performed by issuing the follow
 
 This will create an executable jar file **microprofile-ejemplo-microbundle.jar** within the _target_ maven folder. This can be started by executing the following command
 
+antes de ejcutar el jar debe fijar las variables de entorno que establecen la url de la base de datos, el usuario y la clave
+
+    export url=jdbc:mysql://localhost:3306/ejemplo
+    export user=root
+    export password=12345678    
     java -jar target/microprofile-ejemplo-microbundle.jar
 
 
