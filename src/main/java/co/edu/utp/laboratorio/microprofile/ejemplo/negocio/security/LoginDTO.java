@@ -1,7 +1,11 @@
 package co.edu.utp.laboratorio.microprofile.ejemplo.negocio.security;
 
+import javax.validation.constraints.NotBlank;
+
 public class LoginDTO {
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
 
     public String getUsername() {

@@ -1,6 +1,7 @@
 package co.edu.utp.laboratorio.microprofile.ejemplo.persistencia.entidades;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -19,8 +20,10 @@ public class Persona implements Serializable {
 
     @Id
     @Column(length = 20)
+    @NotBlank
     private String dni;
     @Column(length = 70)
+    @NotBlank
     private String nombre;
     @ElementCollection
     @CollectionTable(name="PERSONA_TELEFONOS")

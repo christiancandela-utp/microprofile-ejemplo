@@ -12,6 +12,7 @@ import javax.security.enterprise.credential.Password;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -31,7 +32,7 @@ public class LoginController {
     private HttpServletResponse response;
 
     @POST
-    public Response login(LoginDTO loginDTO){
+    public Response login(@Valid LoginDTO loginDTO){
         String token = "";
 
 
