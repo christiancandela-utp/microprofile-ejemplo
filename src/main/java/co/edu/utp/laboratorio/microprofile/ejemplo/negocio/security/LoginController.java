@@ -19,11 +19,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 @Path("/login")
 @Singleton
 public class LoginController {
 
+    @Inject
+    private Logger log;
     @Inject
     private SecurityContext securityContext;
     @Context
@@ -33,9 +36,9 @@ public class LoginController {
 
     @POST
     public Response login(@Valid LoginDTO loginDTO){
-        String token = "";
+        String token;
 
-
+        log.info("Autenticando usuario "+loginDTO.getUsername());
         UsernamePasswordCredential credential = new UsernamePasswordCredential(
                 loginDTO.getUsername(),new Password(loginDTO.getPassword())
         );
@@ -43,9 +46,10 @@ public class LoginController {
                 AuthenticationParameters.withParams().credential(credential).newAuthentication(true));
 
         if( status != AuthenticationStatus.SUCCESS ){
+            log.info("Autenticando fallida del usuario "+loginDTO.getUsername());
             throw new JSONWebApplicationException("Usuario o clave incorrecta", Response.Status.UNAUTHORIZED);
         }
-
+        log.info("Autenticando exitosa del usuario "+loginDTO.getUsername());
         token = response.getHeader(HttpHeaders.AUTHORIZATION);
         // TODO obtener el token
         return Response.ok(
