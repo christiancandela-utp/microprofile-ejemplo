@@ -6,12 +6,10 @@ import co.edu.utp.laboratorio.microprofile.ejemplo.persistencia.entidades.Person
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.json.Json;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +37,7 @@ public class PersonaController {
     public Persona update(@PathParam("dni") String dni,@Valid Persona persona){
         find(dni);
         if( !dni.equals(persona.getDni()) ){
-            throw new JSONWebApplicationException(String.format("No se puede modificar el dni",dni), Response.Status.CONFLICT);
+            throw new JSONWebApplicationException(String.format("No se puede modificar el dni %s",dni), Response.Status.CONFLICT);
         }
         personaBO.update(persona);
         return persona;
